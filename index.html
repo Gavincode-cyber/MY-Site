@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plxgx</title>
+  <style>
+    :root { --bg: #0b1220; --card: #111b33; --text: #e7ecff; --muted: #b8c3e1; --accent: #5d8dff; --shadow: 0 8px 30px rgba(0,0,0,0.35); }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { min-height:100vh; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: radial-gradient(circle at 20% 0%, #2b3b6c 0%, var(--bg) 36%, #070b15 100%); color: var(--text); display:grid; place-items:center; padding:16px; }
+    .page { width:min(100%,560px); background:rgba(13,19,42,.85); border:1px solid rgba(255,255,255,.07); border-radius:20px; padding:22px; box-shadow:var(--shadow); backdrop-filter: blur(6px); }
+    .header { text-align:center; margin-bottom:18px; }
+    .avatar { width:88px; height:88px; border-radius:50%; margin:0 auto 12px; background:linear-gradient(135deg,#5d8dff,#7de5ff); display:grid; place-items:center; overflow:hidden; }
+    .avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    h1 { margin:0; font-size:1.7rem; letter-spacing:-.02em; }
+    p { margin:8px 0 0; color:#c7d2ed; }
+    .links { margin-top:16px; display:grid; gap:10px; }
+    .link-item { display:flex; align-items:center; gap:10px; border-radius:12px; text-decoration:none; color:#fff; background:#1d2c62; border:1px solid rgba(255,255,255,.06); padding:11px 12px; transition:.16s ease; }
+    .link-item:hover { background:#2d437c; transform:translateY(-1px); border-color: rgba(255,255,255,.2); }
+    .link-icon { width:26px; height:26px; border-radius:999px; background:rgba(255,255,255,.12); display:grid; place-items:center; font-size:14px; }
+    .link-meta { display:flex; flex-direction:column; }
+    .link-title { font-weight:600; font-size:.95rem; }
+    .link-subtitle { font-size:.8rem; color:#d3dcff; margin-top:2px; }
+    .footer { margin-top:16px; text-align:center; font-size:.8rem; color:#b6c2ea; }
+    .actions { display:flex; justify-content:center; gap:10px; margin-top:8px; flex-wrap:wrap; }
+    .btn { border:none; border-radius:10px; padding:8px 12px; font-weight:600; cursor:pointer; color:#fff; background:#3b4fe8; transition:.15s ease; }
+    .btn:hover { filter:brightness(1.05); }
+    .toggle { background:#5d8dff; }
+    .copied { margin-top:8px; text-align:center; color:#9cdbff; font-size:.83rem; min-height:1.1em; }
+    @media (max-width:480px){ .page{ padding:16px;} h1{font-size:1.5rem;} }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="header">
+      <div class="avatar"><img src="https://cdn.discordapp.com/avatars/1298026435188883509/ef6f4af1ed00c6dbfc6df4c598f5a835.png" alt="Avatar"></div>
+      <h1>Onlyplxgx</h1>
+      <p>Welcome to my website!</p>
+      <div class="actions">
+        <button class="btn" id="copyLinkBtn">Copy my link</button>
+        <button class="btn toggle" id="themeToggle">Toggle theme</button>
+      </div>
+      <div class="copied" id="copyStatus"></div>
+    </section>
+    <section class="links">
+      <a class="link-item" href="https://instagram.com/dontfwgavin" target="_blank" rel="noopener noreferrer"><span class="link-icon">📸</span><div class="link-meta"><span class="link-title">Instagram</span><span class="link-subtitle">@dontfwgavin</span></div></a>
+      <a class="link-item" href="https://twitter.com/onlyplxgx" target="_blank" rel="noopener noreferrer"><span class="link-icon">🐦</span><div class="link-meta"><span class="link-title">X (Twitter)</span><span class="link-subtitle">@onlyplxgx</span></div></a>
+      <a class="link-item" href="https://twitch.tv/onlyplxgx" target="_blank" rel="noopener noreferrer"><span class="link-icon">📺</span><div class="link-meta"><span class="link-title">Twitch</span><span class="link-subtitle">onlyplxgx</span></div></a>
+      <a class="link-item" href="https://www.tiktok.com/@plxgxz" target="_blank" rel="noopener noreferrer"><span class="link-icon">🐙</span><div class="link-meta"><span class="link-title">TikTok</span><span class="link-subtitle">@plxgxz</span></div></a>
+      <a class="link-item" href="mailto:bussiness@plxgx.org" target="_blank" rel="noopener noreferrer"><span class="link-icon">✉️</span><div class="link-meta"><span class="link-title">Email</span><span class="link-subtitle">bussiness@plxgx.org</span></div></a>
+      <a class="link-item" href="https://discord.gg/JPpCv57PzC" target="_blank" rel="noopener noreferrer"><span class="link-icon">✉️</span><div class="link-meta"><span class="link-title">Discord</span><span class="link-subtitle">Join my Server!</span></div></a>
+    </section>
+    <div class="footer">Made by Plxgx </div>
+  </main>
+  <script>
+    const copyBtn = document.getElementById('copyLinkBtn');
+    const status = document.getElementById('copyStatus');
+    const themeBtn = document.getElementById('themeToggle');
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        status.textContent = 'Link copied to clipboard ✓';
+      } catch (e) {
+        status.textContent = 'Copy failed; please copy manually.';
+      }
+      setTimeout(() => { status.textContent = ''; }, 1800);
+    });
+    themeBtn?.addEventListener('click', () => {
+      document.body.classList.toggle('light');
+      if (document.body.classList.contains('light')) {
+        document.documentElement.style.setProperty('--bg', '#f4f6ff');
+        document.documentElement.style.setProperty('--text', '#0d1631');
+        document.documentElement.style.setProperty('--card', '#ffffff');
+      } else {
+        document.documentElement.style.setProperty('--bg', '#0b1220');
+        document.documentElement.style.setProperty('--text', '#e7ecff');
+        document.documentElement.style.setProperty('--card', '#111b33');
+      }
+    });
+  </script>
+</body>
+</html>
