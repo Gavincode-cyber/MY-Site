@@ -1,6 +1,6 @@
 // Configuration
 const CONFIG = {
-    name: "Plxgx",
+    name: "plxgx",
     uid: "1",
     avatar: "https://cdn.discordapp.com/avatars/1298026435188883509/9211697ff29576fda4f123b1a2f68ff0.png",
     status: "Twitch/Youtube",
@@ -8,7 +8,7 @@ const CONFIG = {
     pageTitle: "Plxgx",
     socials: [
         { platform: "Website", url: "https://plxgx.org" },
-        { platform: "Discord", url: "https://discord.gg/HUxvy4Dge" },
+        { platform: "Discord", url: "https://plxgx.org/discord" },
         { platform: "Instagram", url: "https://instagram.com/dontfwgavin" },
         { platform: "Roblox", url: "https://roblox.com/users/6210090215" },
         { platform: "Steam", url: "https://steamcommunity.com/id/plxgx" },
@@ -41,6 +41,44 @@ function getPlatformIcon(platform) {
     }
 }
 
+// Typewriter effect for the profile name
+function typeWriter(el, text, speed = 80, loop = false, pause = 1200) {
+    if (!el) return;
+    let i = 0;
+    let timeoutId = null;
+
+    function start() {
+        el.textContent = '';
+        el.classList.add('typing');
+        i = 0;
+        tick();
+    }
+
+    function tick() {
+        if (i < text.length) {
+            el.textContent += text.charAt(i);
+            i++;
+            timeoutId = setTimeout(tick, speed);
+        } else {
+            el.classList.remove('typing');
+            if (loop) {
+                timeoutId = setTimeout(() => {
+                    el.textContent = '';
+                    // small pause before restarting
+                    timeoutId = setTimeout(start, 200);
+                }, pause);
+            }
+        }
+    }
+
+    start();
+
+    // return a stop function in case it's needed later
+    return () => {
+        if (timeoutId) clearTimeout(timeoutId);
+    };
+}
+
 // Initialize Page
 document.addEventListener("DOMContentLoaded", () => {
     initializePage();
@@ -52,9 +90,20 @@ function initializePage() {
 
 
     // Profile Info
-    document.getElementById("profileName").textContent = CONFIG.name;
+    // typewriter animation for the profile name (slower, looping)
+    const nameEl = document.getElementById("profileName");
+    // reserve width so buttons don't shift when text is cleared
+    nameEl.textContent = CONFIG.name;
+    const rect = nameEl.getBoundingClientRect();
+    if (rect.width) {
+        nameEl.style.minWidth = rect.width + 'px';
+    }
+    typeWriter(nameEl, CONFIG.name, 140, true, 1500);
     document.getElementById("avatar").src = CONFIG.avatar;
     document.getElementById("statusText").textContent = CONFIG.status;
+
+    // enable animated avatar behavior
+    enableAvatarAnimation();
 
     // Social Buttons - inject platform icons and add click handlers
     const socialBtns = document.querySelectorAll(".social-btn");
@@ -77,10 +126,33 @@ function initializePage() {
 
 // (mute controls removed)
 
-// Add any background music or animation effects
-document.addEventListener("mousemove", (e) => {
-    // Optional: Add parallax or other mouse tracking effects
-});
+// Avatar interactive parallax animation
+function enableAvatarAnimation() {
+    const wrap = document.querySelector('.avatar-wrap');
+    const avatar = document.getElementById('avatar');
+    if (!wrap || !avatar) return;
+
+    let mouseX = 0, mouseY = 0, tx = 0, ty = 0;
+
+    const onMove = (e) => {
+        const rect = wrap.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        mouseX = (e.clientX - cx) / rect.width; // approx -0.5 .. 0.5
+        mouseY = (e.clientY - cy) / rect.height;
+    };
+
+    window.addEventListener('mousemove', onMove);
+
+    function loop() {
+        tx += (mouseX * 12 - tx) * 0.08;
+        ty += (mouseY * 10 - ty) * 0.08;
+        wrap.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${ty * -0.6}deg)`;
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+}
 
 // Smooth page transitions
 window.addEventListener("load", () => {
